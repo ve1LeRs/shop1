@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/ve1LeRs/shop/static/css/main.4adca3a1.css",
-    "main.js": "/ve1LeRs/shop/static/js/main.748dc8f1.js",
-    "index.html": "/ve1LeRs/shop/index.html",
-    "main.4adca3a1.css.map": "/ve1LeRs/shop/static/css/main.4adca3a1.css.map",
-    "main.748dc8f1.js.map": "/ve1LeRs/shop/static/js/main.748dc8f1.js.map"
+    "main.css": "/shop/static/css/main.4adca3a1.css",
+    "main.js": "/shop/static/js/main.748dc8f1.js",
+    "index.html": "/shop/index.html",
+    "main.4adca3a1.css.map": "/shop/static/css/main.4adca3a1.css.map",
+    "main.748dc8f1.js.map": "/shop/static/js/main.748dc8f1.js.map"
   },
   "entrypoints": [
     "static/css/main.4adca3a1.css",
