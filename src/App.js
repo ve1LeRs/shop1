@@ -8,8 +8,8 @@ const App = () => {
   const [cartItems, setCartItems] = useState([]);
 
   const products = [
-    { id: 1, name: 'Футболка', price: 1500, size: 'M', image: '/img/shirt.jpg', category: 'Одежда' },
-    { id: 2, name: 'Кроссовки', price: 5000, size: '42', image: '/img/sneakers.jpg', category: 'Обувь' },
+    { id: 1, name: 'Футболка', price: 1500, size: 'M', image: `${process.env.PUBLIC_URL}/img/shirt.jpg`, category: 'Одежда' },
+    { id: 2, name: 'Кроссовки', price: 5000, size: '42', image: `${process.env.PUBLIC_URL}/img/sneakers.jpg`, category: 'Обувь' },
   ];
 
   // Фильтрация товаров по категории
