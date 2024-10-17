@@ -13,23 +13,55 @@ body {
 }
 
 h1 {
-  text-align: center;
+  text-align: center; /* Центрирует текст заголовка */
   font-size: 3rem;
   font-weight: bold;
   color: #333;
   margin-bottom: 40px;
+  background: linear-gradient(45deg, #007aff, #00c6ff); /* Градиентный фон */
+  -webkit-background-clip: text; /* Клип фона для текста */
+  -webkit-text-fill-color: transparent; /* Прозрачный цвет текста */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Тень текста */
+  padding: 10px; /* Отступы вокруг текста */
+  border-radius: 10px; /* Скругление углов */
+  display: inline-block; /* Чтобы задать размер элемента */
 }
+
+
 
 a {
   text-decoration: none;
   color: inherit;
 }
 
+.card p.price {
+  font-size: 1.5rem; /* Увеличьте размер шрифта */
+  color: #007aff; /* Цвет, чтобы привлечь внимание */
+  font-weight: bold; /* Сделайте текст жирным */
+  margin: 10px 0; /* Добавьте отступы */
+}
+
+
 .container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.title-container {
+  width: 100%; /* Задает ширину 100% */
+  display: flex;
+  justify-content: center; /* Центрирует содержимое по горизонтали */
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрирует элементы по горизонтали */
+  justify-content: center; /* Центрирует элементы по вертикали, если нужно */
+  min-height: 100vh; /* Убедитесь, что контейнер занимает всю высоту */
+}
+
 
 .card {
   background-color: #fff;
@@ -184,4 +216,26 @@ a {
 .category-buttons .active {
   background-color: #0056b3;
   font-weight: bold;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Отступ снизу */
+}
+
+.search-input {
+  width: 300px; /* Ширина поля */
+  padding: 10px; /* Отступ внутри поля */
+  border: 1px solid #ccc; /* Цвет границы */
+  border-radius: 5px; /* Скругление углов */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень */
+  font-size: 1rem; /* Размер шрифта */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Плавный переход */
+}
+
+.search-input:focus {
+  border-color: #007aff; /* Цвет границы при фокусе */
+  box-shadow: 0 0 5px rgba(0, 122, 255, 0.5); /* Тень при фокусе */
+  outline: none; /* Убираем обводку */
 }
