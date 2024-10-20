@@ -1,0 +1,45 @@
+/* Cart.css */
+.cart {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cart-item img {
+  width: 80px; /* Фиксированная ширина */
+  height: auto; /* Автоматическая высота */
+  max-width: 100%; /* Максимальная ширина */
+  margin-right: 10px;
+}
+
+.cart-item h4 {
+  margin: 0;
+}
+
+.cart-item button {
+  margin-left: 10px;
+}
+.cart {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cart-image {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
+}

@@ -1,0 +1,42 @@
+/* Стили для профиля пользователя */
+.user-profile {
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+.user-profile h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #3f51b5;
+}
+
+.user-profile form {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile form input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.user-profile form button {
+  background-color: #3f51b5;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-profile form button:hover {
+  background-color: #303f9f;
+}
