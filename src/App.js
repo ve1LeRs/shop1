@@ -36,6 +36,11 @@ const App = () => {
     return matchesCategory && matchesSearchTerm;
   });
 
+  const showNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(''), 3000); // Удаляем уведомление через 3 секунды
+  };
+
   const addToCart = (product) => {
     const existingProduct = cartItems.find(item => item.id === product.id);
     if (existingProduct) {
@@ -50,9 +55,25 @@ const App = () => {
     showNotification(`Товар ${product.name} добавлен в корзину!`); // Показываем уведомление при добавлении товара
   };
 
-  const showNotification = (message) => {
-    setNotification(message);
-    setTimeout(() => setNotification(''), 3000); // Удаляем уведомление через 3 секунды
+ const updateCartItemQuantity = (id, delta) => {
+  setCartItems((prevItems) => {
+    const updatedItems = prevItems.map((item) => {
+      if (item.id === id) {
+        const newQuantity = item.quantity + delta;
+        // Если количество меньше или равно 0, удаляем товар
+        return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
+      }
+      return item;
+    }).filter(Boolean); // Удаляем все null элементы
+    return updatedItems;
+  });
+};
+
+  const addToWishlist = (product) => {
+    if (!wishlist.find(item => item.id === product.id)) {
+      setWishlist([...wishlist, product]);
+      showNotification(`Товар ${product.name} добавлен в избранное!`); // Уведомление для избранного
+    }
   };
 
   const removeFromCart = (id) => {
@@ -71,12 +92,6 @@ const App = () => {
 
   const updateUserProfile = (profileData) => {
     setUserProfile(profileData);
-  };
-
-  const addToWishlist = (product) => {
-    if (!wishlist.find(item => item.id === product.id)) {
-      setWishlist([...wishlist, product]);
-    }
   };
 
   const removeFromWishlist = (id) => {
@@ -144,7 +159,7 @@ const App = () => {
           )}
         />
         <Route path="/product/:id" element={<ProductDetail products={products} addToCart={addToCart} />} />
-        <Route path="/cart" element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} onOrder={handleOrder} />} />
+        <Route path="/cart" element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} updateCartItemQuantity={updateCartItemQuantity} />} />
         <Route path="/profile" element={<UserProfile userProfile={userProfile} updateUserProfile={updateUserProfile} />} />
         <Route path="/wishlist" element={<Wishlist wishlist={wishlist} removeFromWishlist={removeFromWishlist} />} />
         <Route path="/change-password" element={<ChangePassword />} />

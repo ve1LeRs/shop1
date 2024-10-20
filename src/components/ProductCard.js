@@ -1,5 +1,6 @@
 import React from 'react';
-import './ProductCard.css';
+import './ProductCard.css'; // Оставляем стиль, который был в первой версии
+import { Link } from 'react-router-dom'; // Добавляем Link из второй версии
 
 const ProductCard = ({ product, addToCart, addToWishlist }) => {
   const handleAddToCart = (e) => {
@@ -14,13 +15,19 @@ const ProductCard = ({ product, addToCart, addToWishlist }) => {
 
   return (
     <div className="product-card">
-      <img src={product.image} alt={product.name} />
-      <h3>{product.name}</h3>
-      <p>{product.description}</p>
-      <p>Цена: {product.price} ₽</p>
+      <Link to={`/product/${product.id}`}>
+        <img src={product.image} alt={product.name} />
+        <h3>{product.name}</h3>
+        <p>{product.description}</p>
+        <p className="price" style={{ fontWeight: 'bold', color: '#ff5722', fontSize: '1.5rem' }}>
+          {product.price} ₽
+        </p>
+      </Link>
       <div className="buttons">
         <button onClick={handleAddToCart}>Добавить в корзину</button>
-        <button onClick={handleAddToWishlist}>Добавить в избранное</button>
+        {addToWishlist && (
+          <button onClick={handleAddToWishlist}>Добавить в избранное</button>
+        )}
       </div>
     </div>
   );
