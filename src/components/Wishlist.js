@@ -15,7 +15,11 @@ const Wishlist = ({ wishlist, removeFromWishlist }) => {
               <div className="wishlist-item-details">
                 <h3 className="wishlist-item-name">{product.name}</h3>
                 <p className="wishlist-item-price">Цена: {product.price} ₽</p>
-                <button onClick={() => removeFromWishlist(product.id)}>Удалить</button>
+                <button 
+                  onClick={() => removeFromWishlist(product.id, product.size)}
+                >
+                  Удалить
+                </button>
               </div>
             </div>
           ))}

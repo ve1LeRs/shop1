@@ -1,11 +1,10 @@
 import React from 'react';
-import './Notification.css';
 
 const Notification = ({ message, onClose }) => {
   return (
-    <div className="notification" style={{ right: '20px', top: '20px' }}>
-      <span>{message}</span>
-      <button className="close-button" onClick={onClose}>×</button>
+    <div className="notification">
+      <p>{message}</p>
+      <button onClick={onClose}>Закрыть</button>
     </div>
   );
 };

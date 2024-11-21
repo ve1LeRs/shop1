@@ -1,127 +1,190 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import ProductCard from './components/ProductCard';
 import Cart from './components/Cart';
 import ProductDetail from './components/ProductDetail';
-import LanguageSwitcher from './components/LanguageSwitcher';
-import RecommendedProducts from './components/RecommendedProducts';
-import DeliveryOptions from './components/DeliveryOptions';
 import UserProfile from './components/UserProfile';
 import ChangePassword from './components/ChangePassword';
 import Wishlist from './components/Wishlist';
 import Reviews from './components/Reviews';
 import StoreInfo from './components/StoreInfo';
-import Notification from './components/Notification'; // Импортируем Notification
+import Notification from './components/Notification';
+import LoginForm from './components/LoginForm';
+import Register from './components/Register';
+import AdminPanel from './components/AdminPanel';
 import './App.css';
 
 const App = () => {
-  const [selectedCategory, setSelectedCategory] = useState('Все');
-  const [cartItems, setCartItems] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [language, setLanguage] = useState('ru');
-  const [orderHistory, setOrderHistory] = useState([]);
-  const [userProfile, setUserProfile] = useState({ name: '', email: '' });
-  const [wishlist, setWishlist] = useState([]);
-  const [notification, setNotification] = useState(''); // Состояние для уведомления
+  const [products, setProducts] = useState([]); // Список товаров из базы данных
+  const [selectedCategory, setSelectedCategory] = useState('Все'); // Выбранная категория
+  const [cartItems, setCartItems] = useState([]); // Товары в корзине
+  const [searchTerm, setSearchTerm] = useState(''); // Поисковый запрос
+  const [wishlist, setWishlist] = useState([]); // Список избранного
+  const [notification, setNotification] = useState(''); // Уведомления
+  const [userProfile, setUserProfile] = useState(null); // Профиль пользователя
 
-  const products = [
-    { id: 1, name: 'Футболка', price: 1500, image: `${process.env.PUBLIC_URL}/img/shirt.jpg`, category: 'Одежда', description: 'Качественная футболка из хлопка', sizeChart: 'Размерная сетка футболок' },
-    { id: 2, name: 'Кроссовки', price: 5000, image: `${process.env.PUBLIC_URL}/img/sneakers.jpg`, category: 'Обувь', description: 'Удобные кроссовки для бега', sizeChart: 'Размерная сетка кроссовок' },
-    { id: 3, name: 'Кроссовки 2', price: 10000, image: `${process.env.PUBLIC_URL}/img/sneaker.jpg`, category: 'Обувь', description: 'Стильные кроссовки для города', sizeChart: 'Размерная сетка кроссовок' },
-  ];
+  // Функция для обработки успешного оформления заказа
+  const handleOrderComplete = (order) => {
+    console.log('Заказ успешно оформлен:', order);
 
+    if (userProfile) {
+      const updatedUserProfile = { ...userProfile, orders: [...userProfile.orders, order] };
+
+      // Обновляем профиль пользователя в состоянии
+      setUserProfile(updatedUserProfile);
+
+      // Сохраняем обновленный профиль в localStorage
+      localStorage.setItem('userProfile', JSON.stringify(updatedUserProfile));
+
+      // Дополнительные действия после оформления заказа
+      showNotification('Ваш заказ был успешно оформлен и добавлен в ваш профиль!');
+    }
+  };
+
+  // Загрузка данных из API при старте приложения
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/products');
+        if (!response.ok) throw new Error('Ошибка загрузки товаров');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Ошибка при загрузке товаров:', error.message);
+      }
+    };
+    fetchProducts();
+
+    const storedUserProfile = localStorage.getItem('userProfile');
+    if (storedUserProfile) setUserProfile(JSON.parse(storedUserProfile));
+
+    const savedCartItems = localStorage.getItem('cartItems');
+    const savedWishlist = localStorage.getItem('wishlist');
+
+    setCartItems(savedCartItems ? JSON.parse(savedCartItems) : []);
+    setWishlist(savedWishlist ? JSON.parse(savedWishlist) : []);
+  }, []);
+
+  // Сохранение данных в localStorage
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    if (userProfile) {
+      localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    }
+  }, [cartItems, wishlist, userProfile]);
+
+  // Добавление товара в корзину
+  const addToCart = (product) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find(item => item.id === product.id && item.size === product.size);
+      if (existingItem) {
+        return prevItems.map(item =>
+          item.id === product.id && item.size === product.size
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prevItems, { ...product, quantity: 1 }];
+    });
+    showNotification(`Товар "${product.name}" добавлен в корзину!`);
+  };
+
+  // Обновление количества товара в корзине
+  const updateCartItemQuantity = (id, delta) => {
+    setCartItems(prevCartItems =>
+      prevCartItems.map(item =>
+        item.id === id
+          ? { ...item, quantity: Math.max(item.quantity + delta, 1) } // Обновление количества с минимальным значением 1
+          : item
+      )
+    );
+  };
+
+  // Удаление товара из корзины
+  const removeFromCart = (id) => {
+    setCartItems(cartItems.filter(item => item.id !== id));
+    showNotification('Товар удалён из корзины.');
+  };
+
+  // Очистка корзины
+  const clearCart = () => {
+    setCartItems([]);
+    showNotification('Корзина очищена.');
+  };
+
+  // Добавление товара в избранное
+  const addToWishlist = (product) => {
+    // Проверяем, есть ли уже такой товар в избранном с учетом всех уникальных характеристик, например, id и size
+    if (!wishlist.find(item => item.id === product.id && item.size === product.size)) {
+      setWishlist([...wishlist, product]);
+      showNotification(`Товар "${product.name}" добавлен в избранное!`);
+    } else {
+      showNotification(`Товар "${product.name}" уже в избранном!`);
+    }
+  };
+
+  // Удаление товара из избранного
+  const removeFromWishlist = (id, size) => {
+    setWishlist(wishlist.filter(item => item.id !== id || item.size !== size)); // Удаляем товар с учетом id и size
+    showNotification('Товар удалён из избранного.');
+  };
+
+  // Показ уведомлений
+  const showNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(''), 3000); // Скрыть уведомление через 3 секунды
+  };
+
+  // Фильтрация товаров
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'Все' || product.category === selectedCategory;
     const matchesSearchTerm = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearchTerm;
   });
 
-  const showNotification = (message) => {
-    setNotification(message);
-    setTimeout(() => setNotification(''), 3000); // Удаляем уведомление через 3 секунды
+  // Обработчик выхода из профиля
+  const handleLogout = () => {
+    // Удаляем профиль пользователя из состояния и localStorage
+    setUserProfile(null);
+    localStorage.removeItem('userProfile');
+    showNotification('Вы успешно вышли из аккаунта.');
   };
 
-  const addToCart = (product) => {
-    const existingProduct = cartItems.find(item => item.id === product.id);
-    if (existingProduct) {
-      setCartItems(cartItems.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      ));
-    } else {
-      setCartItems([...cartItems, { ...product, quantity: 1 }]);
-    }
-    showNotification(`Товар ${product.name} добавлен в корзину!`); // Показываем уведомление при добавлении товара
-  };
-
- const updateCartItemQuantity = (id, delta) => {
-  setCartItems((prevItems) => {
-    const updatedItems = prevItems.map((item) => {
-      if (item.id === id) {
-        const newQuantity = item.quantity + delta;
-        // Если количество меньше или равно 0, удаляем товар
-        return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
-      }
-      return item;
-    }).filter(Boolean); // Удаляем все null элементы
-    return updatedItems;
-  });
-};
-
-  const addToWishlist = (product) => {
-    if (!wishlist.find(item => item.id === product.id)) {
-      setWishlist([...wishlist, product]);
-      showNotification(`Товар ${product.name} добавлен в избранное!`); // Уведомление для избранного
-    }
-  };
-
-  const removeFromCart = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
-
-  const handleOrder = () => {
-    const newOrder = {
-      id: orderHistory.length + 1,
-      items: cartItems,
-      date: new Date().toLocaleDateString(),
-    };
-    setOrderHistory([...orderHistory, newOrder]);
-    setCartItems([]);
-  };
-
-  const updateUserProfile = (profileData) => {
-    setUserProfile(profileData);
-  };
-
-  const removeFromWishlist = (id) => {
-    setWishlist(wishlist.filter(item => item.id !== id));
-  };
+  // Проверка, авторизован ли пользователь
+  const isUserLoggedIn = !!userProfile;
 
   return (
     <Router>
       <div className="header">
         <h1 style={{ textAlign: 'center' }}>Магазин одежды и обуви</h1>
-        <LanguageSwitcher language={language} setLanguage={setLanguage} />
         <div className="navigation">
           <Link to="/">Главная</Link>
           <Link to="/cart">Корзина</Link>
           <Link to="/wishlist">Избранное</Link>
           <Link to="/store-info">Информация о магазине</Link>
+          {isUserLoggedIn ? (
+            <>
+              <Link to="/profile">Профиль</Link>
+              <button onClick={handleLogout} className="logout-button">
+                Выйти
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Войти</Link>
+              <Link to="/register">Регистрация</Link>
+            </>
+          )}
         </div>
       </div>
-
       {notification && (
-        <Notification 
-          message={notification} 
-          onClose={() => setNotification('')} 
-        />
+        <Notification message={notification} onClose={() => setNotification('')} />
       )}
-
       <Routes>
         <Route
           path="/"
-          element={(
+          element={
             <div>
               <div className="search-container">
                 <input
@@ -137,34 +200,66 @@ const App = () => {
                 <button onClick={() => setSelectedCategory('Одежда')}>Одежда</button>
                 <button onClick={() => setSelectedCategory('Обувь')}>Обувь</button>
               </div>
-
               <div className="container">
-                {filteredProducts.map(product => (
-                  <div key={product.id}>
-                    <ProductCard 
-                      product={product} 
-                      addToCart={addToCart} 
-                      addToWishlist={addToWishlist} 
-                    />
-                    <Link to={`/product/${product.id}`}>
-                      <button>Смотреть подробнее</button>
-                    </Link>
-                  </div>
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    addToCart={addToCart}
+                    addToWishlist={addToWishlist}
+                  />
                 ))}
               </div>
-              <DeliveryOptions />
-              <h2>Рекомендуемые товары</h2>
-              <RecommendedProducts products={products} />
             </div>
-          )}
+          }
         />
-        <Route path="/product/:id" element={<ProductDetail products={products} addToCart={addToCart} />} />
-        <Route path="/cart" element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} updateCartItemQuantity={updateCartItemQuantity} />} />
-        <Route path="/profile" element={<UserProfile userProfile={userProfile} updateUserProfile={updateUserProfile} />} />
-        <Route path="/wishlist" element={<Wishlist wishlist={wishlist} removeFromWishlist={removeFromWishlist} />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/reviews" element={<Reviews products={products} />} />
-        <Route path="/store-info" element={<StoreInfo />} />
+        <Route
+          path="/product/:id"
+          element={<ProductDetail products={products} addToCart={addToCart} />}
+        />
+        <Route
+          path="/cart"
+          element={
+            <Cart
+              cartItems={cartItems}
+              removeFromCart={removeFromCart}
+              clearCart={clearCart}
+              showNotification={showNotification}
+              onOrderComplete={handleOrderComplete} // Передаем функцию
+              updateCartItemQuantity={updateCartItemQuantity} // Передаем функцию
+            />
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={<Wishlist wishlist={wishlist} removeFromWishlist={removeFromWishlist} />}
+        />
+        <Route
+          path="/store-info"
+          element={<StoreInfo />}
+        />
+        <Route
+          path="/profile"
+          element={
+            userProfile ? (
+              <UserProfile userProfile={userProfile} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/login"
+          element={<LoginForm setUserProfile={setUserProfile} />}
+        />
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+        <Route
+          path="/admin"
+          element={<AdminPanel />}
+        />
       </Routes>
     </Router>
   );

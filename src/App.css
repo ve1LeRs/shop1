@@ -3,38 +3,59 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  font-family: 'Arial', sans-serif; /* Убедитесь, что весь сайт использует один шрифт */
+  background-color: #fff;
+  color: #111;
+  transition: background-color 0.3s ease;
 }
 
 h1, h2 {
   text-align: center;
   margin-bottom: 20px;
+  transition: color 0.3s ease;
 }
 
 .header h1 {
   font-size: 2.5rem;
-  color: #4A90E2; /* Пример цвета */
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.3); /* Тень */
+  color: #111;
+  font-weight: bold;
   text-align: center;
+  margin-bottom: 30px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
 }
 
+/* Анимация появления */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Кнопки */
 button {
-  background-color: #3f51b5;
+  background-color: #111;
   color: white;
-  padding: 10px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
   cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  white-space: nowrap; /* Убедимся, что текст в кнопке будет в одну строку */
 }
 
 button:hover {
-  background-color: #303f9f;
+  background-color: #333;
+  transform: translateY(-5px);
 }
 
-input[type="text"] {
-  padding: 10px;
-  width: 100%;
-  max-width: 300px;
-  margin-bottom: 20px;
+button:active {
+  transform: translateY(0);
 }
 
 /* Поиск */
@@ -43,15 +64,45 @@ input[type="text"] {
   margin-bottom: 30px;
 }
 
+input[type="text"] {
+  padding: 10px;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+  border: 2px solid #111;
+  border-radius: 30px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+  border-color: #333;
+  transform: scale(1.05);
+}
+
 /* Категории */
 .category-buttons {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .category-buttons button {
-  margin: 0 10px;
+  background-color: transparent;
+  border: 2px solid #111;
+  color: #111;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 1rem;
+  margin: 0 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-buttons button:hover {
+  background-color: #111;
+  color: white;
+  transform: scale(1.05);
 }
 
 /* Карточки товаров */
@@ -59,62 +110,111 @@ input[type="text"] {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
 }
 
 .product-card {
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  width: 250px;
-  padding: 15px;
+  background-color: #fff;
+  border-radius: 12px;
+  width: 300px; /* Увеличена ширина карточки */
+  padding: 25px; /* Увеличены внутренние отступы */
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  transform: translateY(10px);
+  opacity: 0;
+  animation: fadeInUp 0.5s forwards;
+}
+
+/* Анимация появления карточек */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-card:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
 }
 
 .product-card img {
   max-width: 100%;
-  border-radius: 5px;
+  border-radius: 8px;
   margin-bottom: 10px;
 }
 
 .product-card h2 {
-  font-size: 1.2em;
+  font-size: 1.3em; /* Увеличен размер шрифта */
   margin-bottom: 10px;
 }
 
 .product-card p {
+  font-size: 1rem; /* Увеличен размер шрифта */
   margin-bottom: 10px;
 }
 
 .product-card .add-to-cart {
-  background-color: #ff4081;
+  background-color: #111;
+  padding: 10px;
+  width: 100%;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  white-space: nowrap; /* Текст в кнопке не переносится */
+  overflow: hidden; /* Избегаем вылезания текста за пределы */
+}
+
+.product-card .add-to-cart:hover {
+  background-color: #333;
+  transform: scale(1.05);
 }
 
 /* Профиль пользователя */
 .user-profile {
   text-align: center;
+  padding: 30px;
 }
 
 .user-profile h2 {
   font-size: 1.5em;
+  margin-bottom: 20px;
 }
 
 .user-profile form {
-  max-width: 300px;
+  max-width: 350px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
 
 .user-profile form input {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 2px solid #111;
+  border-radius: 30px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .user-profile form button {
-  margin-top: 10px;
+  padding: 12px;
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-profile form button:hover {
+  background-color: #333;
+  transform: scale(1.05);
 }
 
 /* Список желаемого */
@@ -122,55 +222,57 @@ input[type="text"] {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 20px;
 }
 
 .wishlist-item {
-  margin: 10px;
+  margin: 20px;
+  width: 250px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  animation: fadeInUp 0.5s forwards;
+}
+
+.wishlist-item img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
 }
 
 /* Информация о магазине */
 .store-info {
-  padding: 20px;
+  padding: 40px;
+  background-color: #f5f5f5;
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .store-info p {
   max-width: 800px;
   margin: 0 auto;
-}
-
-.footer-links {
-  text-align: center;
-  margin-top: 20px;
+  font-size: 1rem;
 }
 
 .store-info-link {
   font-size: 1.2em;
-  color: #007bff;
+  color: #111;
   text-decoration: none;
-  border: 1px solid #007bff;
-  padding: 10px 20px;
-  border-radius: 8px;
+  border: 2px solid #111;
+  padding: 12px 25px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
 }
 
 .store-info-link:hover {
-  background-color: #007bff;
+  background-color: #111;
   color: white;
 }
-.next-page-btn {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
 
-.next-page-btn:hover {
-  background-color: #45a049;
-}
-
+/* Навигация */
 .navigation {
   display: flex;
   justify-content: center;
@@ -180,47 +282,64 @@ input[type="text"] {
 .navigation a {
   text-decoration: none;
   margin: 0 15px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #4CAF50; /* Зеленый фон */
-  color: white; /* Белый текст */
-  font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 12px 25px;
+  border: 2px solid #111;
+  border-radius: 50px;
+  background-color: transparent;
+  color: #111;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .navigation a:hover {
-  background-color: #45a049; /* Темнее при наведении */
-  transform: translateY(-2px); /* Подъем кнопки при наведении */
+  background-color: #111;
+  color: white;
+  transform: scale(1.05);
 }
 
-.navigation a:active {
-  transform: translateY(0); /* Возврат к исходному положению при нажатии */
-}
-
+/* Уведомления */
 .notification {
   position: fixed;
   top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #4CAF50; /* Цвет фона */
-  color: white; /* Цвет текста */
-  padding: 15px 20px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Чтобы уведомление было поверх других элементов */
-  transition: opacity 0.5s ease;
+  right: 20px;
+  background-color: #111;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  opacity: 0;
+  animation: slideIn 0.5s forwards;
 }
 
-/* Адаптация для экранов шириной до 768px */
+@keyframes slideIn {
+  from {
+    right: -300px;
+    opacity: 0;
+  }
+  to {
+    right: 20px;
+    opacity: 1;
+  }
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
-  .button {
+
+  .product-card {
     width: 100%;
+    margin-bottom: 30px;
   }
-  h1 {
-    font-size: 1.5rem;
+
+  .category-buttons button {
+    margin: 10px 5px;
+    padding: 10px 15px;
+  }
+
+  .navigation a {
+    padding: 10px 20px;
   }
 }

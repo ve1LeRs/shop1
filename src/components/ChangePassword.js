@@ -1,37 +1,49 @@
 import React, { useState } from 'react';
-import './ChangePassword.css'; // Подключи CSS для стилей
+import { useNavigate } from 'react-router-dom';
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Логика для изменения пароля
-    alert('Пароль изменен успешно!');
+
+    const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+    if (oldPassword === 'password123') {  // Заглушка, проверка старого пароля
+      const updatedProfile = { ...userProfile, password: newPassword };
+      localStorage.setItem('userProfile', JSON.stringify(updatedProfile));  // Сохраняем новый пароль
+      navigate('/profile');  // Перенаправляем обратно в профиль
+    } else {
+      setErrorMessage('Неверный старый пароль');
+    }
   };
 
   return (
-    <div className="change-password">
-      <h2>Изменить пароль</h2>
+    <div className="change-password-container">
+      <h2>Сменить пароль</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
-        <label>
-          Старый пароль:
+        <div>
+          <label>Старый пароль:</label>
           <input
             type="password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
+            required
           />
-        </label>
-        <label>
-          Новый пароль:
+        </div>
+        <div>
+          <label>Новый пароль:</label>
           <input
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            required
           />
-        </label>
-        <button type="submit">Изменить пароль</button>
+        </div>
+        <button type="submit">Обновить пароль</button>
       </form>
     </div>
   );
