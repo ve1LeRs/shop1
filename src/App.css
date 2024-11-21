@@ -3,7 +3,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Arial', sans-serif; /* Убедитесь, что весь сайт использует один шрифт */
+  font-family: 'Arial', sans-serif;
   background-color: #fff;
   color: #111;
   transition: background-color 0.3s ease;
@@ -13,26 +13,6 @@ h1, h2 {
   text-align: center;
   margin-bottom: 20px;
   transition: color 0.3s ease;
-}
-
-.header h1 {
-  font-size: 2.5rem;
-  color: #111;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 30px;
-  opacity: 0;
-  animation: fadeIn 1s forwards;
-}
-
-/* Анимация появления */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 /* Кнопки */
@@ -46,7 +26,7 @@ button {
   font-size: 1rem;
   transition: all 0.3s ease;
   transform: translateY(0);
-  white-space: nowrap; /* Убедимся, что текст в кнопке будет в одну строку */
+  white-space: nowrap;
 }
 
 button:hover {
@@ -85,6 +65,7 @@ input[type="text"]:focus {
   display: flex;
   justify-content: center;
   margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .category-buttons button {
@@ -94,7 +75,7 @@ input[type="text"]:focus {
   padding: 10px 20px;
   border-radius: 50px;
   font-size: 1rem;
-  margin: 0 15px;
+  margin: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -110,23 +91,26 @@ input[type="text"]:focus {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 20px;
 }
 
 .product-card {
   background-color: #fff;
   border-radius: 12px;
-  width: 300px; /* Увеличена ширина карточки */
-  padding: 25px; /* Увеличены внутренние отступы */
+  width: 100%;
+  max-width: 300px;
+  padding: 20px;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   transform: translateY(10px);
   opacity: 0;
   animation: fadeInUp 0.5s forwards;
+  display: flex;
+  flex-direction: column;  /* Добавлено для вертикального расположения элементов */
+  justify-content: space-between;  /* Чтобы элементы не слипались */
 }
 
-/* Анимация появления карточек */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -150,23 +134,22 @@ input[type="text"]:focus {
 }
 
 .product-card h2 {
-  font-size: 1.3em; /* Увеличен размер шрифта */
+  font-size: 1.3em;
   margin-bottom: 10px;
 }
 
 .product-card p {
-  font-size: 1rem; /* Увеличен размер шрифта */
+  font-size: 1rem;
   margin-bottom: 10px;
 }
 
 .product-card .add-to-cart {
   background-color: #111;
   padding: 10px;
-  width: 100%;
+  width: 100%;  /* Кнопка теперь занимает всю ширину */
   border-radius: 50px;
   transition: all 0.3s ease;
-  white-space: nowrap; /* Текст в кнопке не переносится */
-  overflow: hidden; /* Избегаем вылезания текста за пределы */
+  margin-top: 10px;  /* Добавлен отступ сверху */
 }
 
 .product-card .add-to-cart:hover {
@@ -323,23 +306,114 @@ input[type="text"]:focus {
   }
 }
 
-/* Адаптивность */
+/* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
+  /* Контейнер для карточек продуктов */
   .container {
     flex-direction: column;
+    gap: 20px;
+    padding: 10px; /* Добавьте отступы для лучшего восприятия */
   }
 
+  /* Карточки товаров */
   .product-card {
+    width: 90%;  /* Ставим фиксированную ширину для карточек */
+    margin: 10px auto 20px; /* Отступы между карточками */
+    padding: 20px;
+  }
+
+  /* Кнопки категорий */
+  .category-buttons {
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    margin-bottom: 30px;
   }
 
   .category-buttons button {
-    margin: 10px 5px;
-    padding: 10px 15px;
+    width: 100%;  /* Кнопки занимают всю ширину */
+    margin: 5px 0;
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+
+  /* Навигация */
+  .navigation {
+    flex-direction: column;  /* Переводим навигацию на вертикальное расположение */
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box; /* Убедитесь, что padding не выходит за пределы */
   }
 
   .navigation a {
-    padding: 10px 20px;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    margin: 10px 0;
+    width: 90%;  /* Ставим ограничение по ширине */
+    text-align: center; /* Текст по центру */
+    box-sizing: border-box; /* Убедимся, что все элементы помещаются */
+  }
+
+  /* Список желаемого */
+  .wishlist-item {
+    width: 90%;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* Профиль пользователя */
+  .user-profile form {
+    width: 100%;
+  }
+
+  .user-profile form input {
+    font-size: 1.2rem;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .user-profile form button {
+    font-size: 1.2rem;
+    padding: 15px;
+    margin-bottom: 15px; /* Отступы между кнопками */
+  }
+
+  /* Ссылка на магазин */
+  .store-info-link {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Кнопки добавления в корзину */
+  .product-card .add-to-cart {
+    font-size: 1.2rem;
+    padding: 15px;
+    width: 100%;
+  }
+
+  /* Кнопки главного меню (главная, корзина и т.д.) */
+  .navigation a {
+    font-size: 1.2rem;
+    padding: 15px 25px;
+    width: 90%;  /* Ограничиваем ширину */
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* Для всех кнопок */
+  button {
+    font-size: 1.2rem; /* Увеличьте шрифт кнопок */
+    padding: 15px 30px;
+    width: 100%;
+    box-sizing: border-box; /* Убедитесь, что кнопки не выходят за пределы */
+  }
+
+  /* Контейнер для уведомлений */
+  .notification {
+    width: auto;
+    max-width: 100%;
+    left: auto;
+    right: 10px;
   }
 }
